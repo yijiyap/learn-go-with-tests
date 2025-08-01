@@ -1,6 +1,9 @@
 package wallet
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Wallet struct {
 	balance Bitcoin
@@ -24,6 +27,12 @@ func (b Bitcoin) String() string {
 	return fmt.Sprintf("%d BTC", b)
 }
 
-func (w *Wallet) Withdraw(amount Bitcoin) {
+var ErrInsufficientFunds = errors.New("can't withdraw allat cuz u broke!")
+
+func (w *Wallet) Withdraw(amount Bitcoin) error {
+	if w.balance < amount {
+		return ErrInsufficientFunds
+	}
 	w.balance -= amount
+	return nil
 }
